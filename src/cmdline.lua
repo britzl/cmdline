@@ -20,52 +20,51 @@ local M = {}
 
 --- Parse command line arguments string
 -- @param argv Command line arguments to parse
--- @return opts Options (ie anything)
+-- @return options Options (ie anything)
 -- @return args Arguments
 function M.parse(argv)
-	local opts = { }
-	local args = { }
+	local options = { }
+	local arguments = { }
 	if not argv then
-		return opts, args
+		return options, arguments
 	end
-	for i, arg in ipairs(argv) do
-		-- option?
-		local opt = arg:match("^%-%-(.*)") or arg:match("^%-(.)")
-		if opt then
-			-- extract option name and value
-			local key, value = opt:match("([a-z_%-]*)=(.*)")
-			-- value provided?
+	for i,arg in ipairs(argv) do
+		local long_opt = arg:match("^%-%-(.*)")
+		local short_opt = arg:match("^%-(.*)")
+		if long_opt or short_opt then
+			local key, value
+			if long_opt then
+				key, value = long_opt:match("([a-z_%-]*)=(.*)")
+			else
+				key, value = short_opt:match("([a-z_])=(.*)")
+			end
+
 			if value then
-				-- option seen once?
-				if type(opts[key]) == 'string' then
-					-- transform option to array of values
-					opts[key] = { opts[key], value }
-				-- options seen many times?
-				elseif type(opts[key]) == 'table' then
-					-- append value
-					table.insert(opts[key], value)
-				-- options was not seen
+				-- option seen once? transform option to array of values
+				if type(options[key]) == 'string' then
+					options[key] = { options[key], value }
+				-- options seen many times? append value
+				elseif type(options[key]) == 'table' then
+					table.insert(options[key], value)
+				-- options was not seen. assign value
 				else
-					-- assign value
-					opts[key] = value
+					options[key] = value
 				end
 			-- no value provided. just set option to true
-			elseif opt ~= '' then
-				opts[opt] = true
-			-- options stop
-			else
-				-- copy left arguments
+			elseif key and key ~= "" then
+				options[key] = true
+			-- options stop. copy left arguments
+			elseif long_opt then
 				for i = i + 1, #argv do
-					table.insert(args, argv[i])
+					table.insert(arguments, argv[i])
 				end
 				break
 			end
-		-- argument
 		else
-			table.insert(args, arg)
+			table.insert(arguments, arg)
 		end
 	end
-	return opts, args
+	return options, arguments
 end
 
 return M
