@@ -36,9 +36,10 @@ function M.parse(argv)
 			if long_opt then
 				key, value = long_opt:match("([a-z_%-]*)=(.*)")
 			else
-				key, value = short_opt:match("([a-z_])=(.*)")
+				key, value = short_opt:match("([a-z])=(.*)")
 			end
-
+			key = key or long_opt or short_opt
+			
 			if value then
 				-- option seen once? transform option to array of values
 				if type(options[key]) == 'string' then
