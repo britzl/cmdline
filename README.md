@@ -4,15 +4,15 @@ A simple command line argument parser for Lua. The command line parser supports 
 
 long options
 ------------
-Strings of form '--OPTION=VALUE' are parsed to { OPTION = 'VALUE' }.
-Strings of form '--OPTION' are parsed to { OPTION = true }.
-Multiple '--OPTION=VALUE' are merged into { OPTION = { 'VALUE', 'VALUE', ... } }.
+* Strings of form '--OPTION=VALUE' are parsed to { OPTION = 'VALUE' }.
+* Strings of form '--OPTION' are parsed to { OPTION = true }.
+* Multiple '--OPTION=VALUE' are merged into { OPTION = { 'VALUE', 'VALUE', ... } }.
 
 short options
 -------------
-Strings of form '-O=VALUE' are parsed to { O = 'VALUE' }.
-Strings of form '-O' are parsed to { O = true }.
-Multiple '-O=VALUE' are merged into { O = { 'VALUE', 'VALUE', ... } }.
+* Strings of form '-O=VALUE' are parsed to { O = 'VALUE' }.
+* Strings of form '-O' are parsed to { O = true }.
+* Multiple '-O=VALUE' are merged into { O = { 'VALUE', 'VALUE', ... } }.
 
 argument termination
 --------------------
